@@ -699,6 +699,11 @@ static CGKeyCode GTMKeyCodeForCharCode(CGCharCode charCode) {
 		char c = (char)[[map valueForKey:@"character"] characterAtIndex:0];
 		short keycode = GTMKeyCodeForCharCode(c);
 		[self sendKeyboardEvent:keycode keyDown:isPressed];
+	}else if ([modeName isEqualToString:@"\tF10"]){
+		[self sendModifierKeys:map isPressed:isPressed]; 
+		
+		[self sendKeyboardEvent:109 keyDown:isPressed];
+		
 	}else if ([modeName isEqualToString:@"\tReturn"]){
 		[self sendModifierKeys:map isPressed:isPressed]; 
 		
