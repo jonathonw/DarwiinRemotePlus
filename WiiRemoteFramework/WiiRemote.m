@@ -136,7 +136,8 @@ typedef enum {
 
 - (IOReturn) connectTo:(IOBluetoothDevice *) device
 { 
-	_wiiDevice = device; 
+	_wiiDevice = device;
+    [_wiiDevice retain];
 	if (_wiiDevice == nil)
 		return kIOReturnBadArgument; 
 
@@ -146,11 +147,13 @@ typedef enum {
 	_cchan = [self openL2CAPChannelWithPSM:kBluetoothL2CAPPSMHIDControl delegate:self];
 	if (!_cchan)
 		return kIOReturnNotOpen;
+    [_cchan retain];
 
 	usleep (20000);
 	_ichan = [self openL2CAPChannelWithPSM:kBluetoothL2CAPPSMHIDInterrupt delegate:self];
 	if (!_ichan)
 		return kIOReturnNotOpen;
+    [_ichan retain];
 	
 	NSLogDebug(@"Allow bluetooth stack to 'settle', wait few milliseconds");
 	usleep (20000);
@@ -508,11 +511,13 @@ typedef enum {
 	// cam: set delegate to nil
 	[_cchan setDelegate:nil];
 	ret = [_cchan closeChannel];
+    [_cchan release];
 	_cchan = nil;
 	LogIOReturn (ret);
 	
 	[_ichan setDelegate:nil];
 	ret = [_ichan closeChannel];
+    [_ichan release];
 	_ichan = nil;
 	LogIOReturn (ret);
 
